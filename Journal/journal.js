@@ -12,7 +12,7 @@ exports.getJournalData = function(req, res){
                 console.log(result);
             })
             .catch(err => {
-                console.log(err);
+                res.json(err);
             })
 
 }
@@ -25,7 +25,7 @@ exports.postJournalData = function(req, res){
                 res.json(result);
             })
             .catch(err => {
-                console.log(err);
+                res.json(err);
             })
 
 }
@@ -42,6 +42,6 @@ exports.getJournalDataById = function(req,res){
                 console.log(result);
             })
             .catch(err => {
-                console.log(err);
+                res.json(err);
             });
 }

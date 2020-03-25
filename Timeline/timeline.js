@@ -12,7 +12,7 @@ exports.getTimelineData = function(req,res){
             console.log(result);
         })
         .catch(err => {
-            console.log(err);
+            res.json(err);
         });
 }
 
@@ -24,7 +24,7 @@ exports.postTimelineData = function(req,res){
             res.json(result);
         })
         .catch(err => {
-            console.log(err);
+            res.json(err);
         })
 
 }
