@@ -16,6 +16,9 @@ const timelineSchema = new schema({
     },
     title: {
         type: String
+    },
+    activity: {
+        type: String
     }
 });
 
