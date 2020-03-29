@@ -9,7 +9,6 @@ exports.getJournalData = function(req, res){
             .exec()
             .then(result => {
                 res.json(result);
-                console.log(result);
             })
             .catch(err => {
                 res.json(err);
@@ -40,6 +39,30 @@ exports.getJournalDataById = function(req,res){
             .then(result => {
                 res.json(result);
                 console.log(result);
+            })
+            .catch(err => {
+                res.json(err);
+            });
+}
+
+exports.editJournalData = function(req, res){
+
+    let id = mongoose.Types.ObjectId(req.body._id);
+
+    return journalModel
+            .updateOne(
+                {'_id': id}, 
+                {
+                    'userId': req.body.userId,
+                    'title': req.body.title, 
+                    'content': req.body.content,
+                    'length': req.body.length,
+                    'tags': req.body.tags,
+                    'dateTime': req.body.dateTime
+                },
+            )
+            .then(result => {
+                res.json(result)
             })
             .catch(err => {
                 res.json(err);

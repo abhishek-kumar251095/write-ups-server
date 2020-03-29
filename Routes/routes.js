@@ -5,7 +5,8 @@ module.exports = async function(app){
     
     app.route('/journal')
         .get(journalController.getJournalData)
-        .post(journalController.postJournalData);
+        .post(journalController.postJournalData)
+        .put(journalController.editJournalData)
 
     app.route('/journal/:id')
         .get(journalController.getJournalDataById);
