@@ -3,7 +3,8 @@ const express = require('express'),
       app = express(),
       bodyParser = require('body-parser'),
       routes = require('../Routes/routes'),
-      cors = require('cors');
+      cors = require('cors'),
+      passport = require('../StartUp/passport');
 
 
 module.exports =  async function(){
@@ -13,9 +14,14 @@ module.exports =  async function(){
 
     app.use(cors());
     
+    console.log('Initializing Passport...');
+    await passport(app);
+
     await routes(app);
 
     app.listen(port, () => {
         console.log(`Server started on port ${port}`);
     });
+
+    return app;
 }

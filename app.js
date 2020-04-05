@@ -5,10 +5,9 @@ require('dotenv').config();
 
 (async function init(){
 
-    console.log("Starting server...");
+    console.log('Starting server...');
     await server();
 
-    console.log("Connecting to Database...");
+    console.log('Connecting to Database...');
     await db.dbConnect();
-
 })();
