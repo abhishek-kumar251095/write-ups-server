@@ -14,9 +14,8 @@ exports.register = function(req, res) {
 
     return user.save()
             .then(result => {
-                const token = user.generateJwt();
-                res.json({
-                    "token": token
+                res.send({
+                    "status": 'Success'
                 });
             })
             .catch(err => {
@@ -41,6 +40,7 @@ exports.login = function(req, res) {
             token = tempUser.generateJwt();
             res.status(200);
             res.json({
+              "username": tempUser.username,
               "token" : token
             });
 

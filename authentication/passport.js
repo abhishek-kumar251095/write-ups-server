@@ -11,7 +11,7 @@ const passportConfig = function(username, password, done){
             if (!res) {
                 return done(null, false, {
                     user: null,
-                    message: 'User not found'
+                    message: 'User doesn\'t exist!'
                 })
             }
             const userModel = new user();
@@ -19,7 +19,7 @@ const passportConfig = function(username, password, done){
             if (!res.validatePassword(password)) {
                 return done(null, false, {
                     user: null,
-                    message: 'Wrong password'
+                    message: 'Invalid password!'
                 })
             }
 

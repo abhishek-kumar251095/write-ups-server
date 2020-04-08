@@ -4,12 +4,13 @@ const mongoose = require('mongoose'),
 
 exports.getTimelineData = function(req,res){
 
+    const userId = mongoose.Types.ObjectId(req.payload._id);
+
     timelineModel
-        .find({})
+        .find({'userId': userId})
         .exec()
         .then(result => {
             res.json(result);
-            console.log(result);
         })
         .catch(err => {
             res.json(err);
@@ -17,7 +18,9 @@ exports.getTimelineData = function(req,res){
 }
 
 exports.postTimelineData = function(req,res){
-    console.log(req.body);
+
+    const userId = mongoose.Types.ObjectId(req.payload._id);
+    req.body.userId = userId
     timelineModel
         .create(req.body)
         .then(result => {

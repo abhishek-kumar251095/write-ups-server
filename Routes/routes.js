@@ -1,20 +1,27 @@
 const journalController = require('../Journal/journal'),
       timelineController = require('../Timeline/timeline'),
-      authController = require('../authentication/authentication');
+      authController = require('../authentication/authentication'),
+      jwt = require('express-jwt');
+
 
 module.exports = async function(app){
-    
+
+    const auth = jwt({
+        secret: process.env.AUTH_KEY,
+        userProperty: 'payload'
+      });
+
     app.route('/journal')
-        .get(journalController.getJournalData)
-        .post(journalController.postJournalData)
-        .put(journalController.editJournalData)
+        .get(auth, journalController.getJournalData)
+        .post(auth, journalController.postJournalData)
+        .put(auth, journalController.editJournalData)
 
     app.route('/journal/:id')
-        .get(journalController.getJournalDataById);
+        .get(auth, journalController.getJournalDataById);
 
     app.route('/timeline')
-        .get(timelineController.getTimelineData)
-        .post(timelineController.postTimelineData);
+        .get(auth, timelineController.getTimelineData)
+        .post(auth, timelineController.postTimelineData);
     
     app.route('/user/login')
         .post(authController.login);

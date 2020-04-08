@@ -3,7 +3,7 @@ const mongoose = require('mongoose'),
 
 const timelineSchema = new schema({
     userId: {
-        type: Number
+        type: String
     },
     entryId:{
         type: String

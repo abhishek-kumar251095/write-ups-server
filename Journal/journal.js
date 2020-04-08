@@ -4,8 +4,10 @@ const mongoose = require('mongoose'),
 
 exports.getJournalData = function(req, res){
 
+    const userId = mongoose.Types.ObjectId(req.payload._id);
+
     return journalModel
-            .find({})
+            .find({'userId': userId})
             .exec()
             .then(result => {
                 res.json(result);
@@ -18,6 +20,8 @@ exports.getJournalData = function(req, res){
 
 exports.postJournalData = function(req, res){
     
+    req.body.userId = mongoose.Types.ObjectId(req.payload._id);
+
     return journalModel
             .create(req.body)
             .then(result => {
@@ -32,13 +36,13 @@ exports.postJournalData = function(req, res){
 exports.getJournalDataById = function(req,res){
 
     const id = mongoose.Types.ObjectId(req.params.id);
+    const userId = mongoose.Types.ObjectId(req.payload._id);
 
     return journalModel
-            .findOne({'_id': id})
+            .findOne({'_id': id, 'userId': userId})
             .exec()
             .then(result => {
                 res.json(result);
-                console.log(result);
             })
             .catch(err => {
                 res.json(err);
@@ -48,12 +52,16 @@ exports.getJournalDataById = function(req,res){
 exports.editJournalData = function(req, res){
 
     let id = mongoose.Types.ObjectId(req.body._id);
+    const userId = mongoose.Types.ObjectId(req.payload._id);
 
     return journalModel
             .updateOne(
-                {'_id': id}, 
                 {
-                    'userId': req.body.userId,
+                    '_id': id,
+                    'userId': userId
+                }, 
+                {
+                    'userId': userId,
                     'title': req.body.title, 
                     'content': req.body.content,
                     'length': req.body.length,
