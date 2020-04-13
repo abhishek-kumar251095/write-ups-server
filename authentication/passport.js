@@ -3,34 +3,44 @@ const passport = require('passport'),
       mongoose = require('mongoose'),
       user = mongoose.model('user');
 
-const passportConfig = function(username, password, done){
+const passportConfig = async function(username, password, done){
 
-    user.findOne({username: username})
-        .exec()
-        .then(res => {
-            if (!res) {
-                return done(null, false, {
-                    user: null,
-                    message: 'User doesn\'t exist!'
-                })
-            }
-            const userModel = new user();
-            Object.assign(userModel, res);
-            if (!res.validatePassword(password)) {
-                return done(null, false, {
-                    user: null,
-                    message: 'Invalid password!'
-                })
-            }
+    try {
 
-            return done(null, {
-                user: res,
-                message: 'User authenticated'
+        let userData = await user.findOne({username: username}).exec();
+
+        if (!userData) {
+            return done(null, false, {
+                user: null,
+                message: 'User doesn\'t exist!'
             })
+        }
+
+        const userModel = new user();
+        Object.assign(userModel, userData);
+
+        let isPasswordValid = await userModel.validatePassword(password);
+
+        console.log(isPasswordValid);
+
+        if (!isPasswordValid) {
+            return done(null, false, {
+                user: null,
+                message: 'Invalid password!'
+            })
+        }
+
+        return done(null, {
+            user: userData,
+            message: 'User authenticated'
         })
-        .catch(err => {
-            return done(err);
-        })
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+    
 }
 
 passport.use(new passportLocal(passportConfig));

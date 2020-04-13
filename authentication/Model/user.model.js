@@ -22,13 +22,32 @@ const user = new schema({
 });
 
 user.methods.setPassword = function(password){
-    this.salt = crypto.randomBytes(16).toString('hex');
-    this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
+
+    return new Promise((resolve, reject) => {
+
+        this.salt = crypto.randomBytes(16).toString('hex');
+        crypto.pbkdf2(password, this.salt, 1000, 64, 'sha512', (err, derivedKey) => {
+            if (err) {
+                reject(err);
+            }
+            this.hash = derivedKey.toString('hex');
+            resolve(this.hash);
+        });
+
+    });
 }
 
 user.methods.validatePassword = function(password){
-    const hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512').toString('hex');
-    return this.hash === hash;
+        
+    return new Promise((resolve, reject) => {
+
+        crypto.pbkdf2(password, this.salt, 1000, 64, 'sha512', (err, derivedKey) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(this.hash === derivedKey.toString('hex'))
+        });
+    });
 }
 
 user.methods.generateJwt = function(){

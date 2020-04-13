@@ -3,14 +3,14 @@ const passport = require('passport'),
       reqModel = require('./Model/user.model'),
       userModel = mongoose.model('user');
 
-exports.register = function(req, res) {
+exports.register = async function(req, res) {
 
     const user = new userModel();
 
     user.username = req.body.username;
     user.email = req.body.email;
 
-    user.setPassword(req.body.password);
+    let setPwd = await user.setPassword(req.body.password);
 
     return user.save()
             .then(result => {
@@ -26,7 +26,7 @@ exports.register = function(req, res) {
 exports.login = function(req, res) {
 
     passport.authenticate('local', function(err, result, info){
-        
+
         if (err) {
             console.log(err);
             res.json(err);
@@ -36,7 +36,7 @@ exports.login = function(req, res) {
         if (result.message === 'User authenticated') {
             const tempUser = new userModel();
             Object.assign(tempUser, result.user)
-
+            console.log(result.user);
             token = tempUser.generateJwt();
             res.status(200);
             res.json({
