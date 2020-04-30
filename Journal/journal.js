@@ -76,3 +76,22 @@ exports.editJournalData = function(req, res){
                 res.json(err);
             });
 }
+
+exports.getJournalDataByTags = function(req, res) {
+    let tag = req.params.tag;
+    const userId = mongoose.Types.ObjectId(req.payload._id);
+    
+    return journalModel
+            .find({
+                $and: [
+                    {"userId": userId},
+                    {"tags": tag }
+                ]
+            })
+            .then(result => {
+                res.json(result);
+            })
+            .catch(err => {
+                res.json(err);
+            })
+}

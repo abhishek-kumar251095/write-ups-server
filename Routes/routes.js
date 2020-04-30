@@ -19,6 +19,9 @@ module.exports = async function(app){
     app.route('/journal/:id')
         .get(auth, journalController.getJournalDataById);
 
+    app.route('/journal/tag/:tag')
+        .get(auth, journalController.getJournalDataByTags);
+
     app.route('/timeline')
         .get(auth, timelineController.getTimelineData)
         .post(auth, timelineController.postTimelineData);
